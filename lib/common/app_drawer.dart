@@ -29,11 +29,11 @@ class AppDrawer extends StatelessWidget {
               text: 'Settings',
               onTap: () =>
                   Navigator.pushReplacementNamed(context, '/settings')),
-          _createDrawerItem(
+         /* _createDrawerItem(
             icon: Icons.reply_all,
             text: 'Logout',
             onTap: () => BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut())
-          ),
+          ),*/
           ListTile(
             title: Row(
               children: <Widget>[
