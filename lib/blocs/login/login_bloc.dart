@@ -33,8 +33,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         authenticationBloc.add(LoggedIn(token: token));
         yield LoginInitial();
-      } catch (error) {
-        print('Login BLoC '+error.message);
+      } catch (error,stacktrace) {
+        print('Login BLoC: '+error.message + ' ' + stacktrace.toString());
         yield LoginFailure(error: error.toString());
       }
     }

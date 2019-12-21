@@ -18,8 +18,8 @@ class UserRepository {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final response = await _authApiProvider.getToken(username, password);
-      print(response);
       if(response != null) {
+        print(response);
         print('Response != null:'+response.toString());
         prefs.setInt('id', response.id);
         prefs.setString('name', response.firstname);
