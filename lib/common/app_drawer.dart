@@ -1,16 +1,19 @@
 import 'package:blaze_chat/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:blaze_chat/authentication/user_repository.dart';
 
 class AppDrawer extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          _createHeader(),
+          _createHeader('Rant'),
           _createDrawerItem(
               icon: Icons.contacts,
               text: 'Chats',
@@ -55,7 +58,8 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _createHeader() {
+  Widget _createHeader(String name) {
+    String _name = name;
     return DrawerHeader(
         margin: EdgeInsets.zero,
         padding: EdgeInsets.zero,
@@ -67,9 +71,9 @@ class AppDrawer extends StatelessWidget {
           Positioned(
               bottom: 12.0,
               left: 16.0,
-              child: Text("Name",
+              child: Text(_name,
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500))),
         ]));
@@ -90,4 +94,5 @@ class AppDrawer extends StatelessWidget {
       onTap: onTap,
     );
   }
+
 }

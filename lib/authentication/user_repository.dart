@@ -59,7 +59,7 @@ class UserRepository {
     return false;
   }
 
-  Future<String> getUser() async {
+  static Future<String> getUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('name');
   }
