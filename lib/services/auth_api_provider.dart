@@ -17,7 +17,6 @@ class AuthApiProvider {
         body: body,
       );
       print(response.body);
-
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body);
         var user = new Login.fromJson(responseJson);
