@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:blaze_chat/simple_bloc_delegate.dart';
 import 'package:blaze_chat/authentication/user_repository.dart';
 import 'package:blaze_chat/authentication/authentication.dart';
 import 'package:blaze_chat/blocs/splash/splash.dart';
@@ -11,26 +12,6 @@ import 'package:blaze_chat/blocs/home/home.dart';
 import 'package:blaze_chat/common/common.dart';
 
 import 'blocs/settings/settings.dart';
-
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print(error);
-  }
-}
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();

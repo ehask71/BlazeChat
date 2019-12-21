@@ -3,7 +3,6 @@ import 'package:blaze_chat/common/common.dart';
 import 'package:blaze_chat/models/login.dart';
 import 'package:blaze_chat/services/account_api_provider.dart';
 import 'package:blaze_chat/services/auth_api_provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,7 +58,7 @@ class UserRepository {
     return false;
   }
 
-  static Future<String> getUser() async {
+  Future<String> getUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('name');
   }

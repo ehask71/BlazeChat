@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:blaze_chat/authentication/user_repository.dart';
 
 class AppDrawer extends StatelessWidget {
+  final String name;
+
+  AppDrawer({Key key, @required this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

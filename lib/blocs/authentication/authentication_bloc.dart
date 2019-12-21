@@ -8,10 +8,11 @@ import './authentication.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserRepository userRepository;
+  final UserRepository _userRepository;
 
-  AuthenticationBloc({@required this.userRepository})
-      : assert(userRepository != null);
+  AuthenticationBloc({@required userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository;
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();
@@ -21,10 +22,10 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      final bool hasToken = await userRepository.hasToken();
+      final bool hasToken = await _userRepository.hasToken();
       await Future.delayed(Duration(milliseconds: 2000));
       if (hasToken) {
-        yield AuthenticationAuthenticated();
+        yield AuthenticationAuthenticated(await _userRepository.getUser());
       } else {
         yield AuthenticationUnauthenticated();
       }
@@ -32,8 +33,8 @@ class AuthenticationBloc
 
     if (event is LoggedIn) {
       yield AuthenticationLoading();
-      await userRepository.persistToken(event.token);
-      yield AuthenticationAuthenticated();
+      await _userRepository.persistToken(event.token);
+      yield AuthenticationAuthenticated(await _userRepository.getUser());
     }
 
     if (event is LoggedOut) {
@@ -42,4 +43,5 @@ class AuthenticationBloc
       yield AuthenticationUnauthenticated();
     }
   }
+
 }
