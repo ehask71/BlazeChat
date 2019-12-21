@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
-import 'user_repository.dart';
+import 'package:blaze_chat/user_repository.dart';
 
 import './authentication.dart';
 
@@ -39,7 +39,7 @@ class AuthenticationBloc
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
-      await userRepository.deleteToken();
+      await _userRepository.deleteToken();
       yield AuthenticationUnauthenticated();
     }
   }

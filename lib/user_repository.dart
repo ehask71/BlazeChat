@@ -22,6 +22,7 @@ class UserRepository {
         prefs.setInt('id', response.id);
         prefs.setString('name', response.firstname);
         prefs.setString('token', response.token);
+        prefs.setString('roadname', response.roadname);
         return response.token;
       } else {
         throw UserNotFoundException('Auth Error');
@@ -60,6 +61,6 @@ class UserRepository {
 
   Future<String> getUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('name');
+    return prefs.getString('roadname');
   }
 }

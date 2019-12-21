@@ -2,13 +2,17 @@ import 'package:blaze_chat/common/common.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:blaze_chat/authentication/authentication.dart';
+import 'package:blaze_chat/blocs/authentication/authentication.dart';
 
 class HomePage extends StatelessWidget {
+  final String displayName;
+
+  HomePage({Key key, @required this.displayName}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: AppDrawer(),
+      drawer: AppDrawer(displayName: this.displayName),
       appBar: AppBar(
         title: Text('ILMC Groups'),
       ),

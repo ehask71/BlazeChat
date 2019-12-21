@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
-import 'package:blaze_chat/authentication/user_repository.dart';
+import 'package:blaze_chat/user_repository.dart';
 
-import 'package:blaze_chat/authentication/authentication.dart';
+import 'package:blaze_chat/blocs/authentication/authentication.dart';
 import 'package:blaze_chat/blocs/login/login.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {

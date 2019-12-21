@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:blaze_chat/simple_bloc_delegate.dart';
-import 'package:blaze_chat/authentication/user_repository.dart';
-import 'package:blaze_chat/authentication/authentication.dart';
+import 'package:blaze_chat/blocs/authentication/authentication.dart';
 import 'package:blaze_chat/blocs/splash/splash.dart';
 import 'package:blaze_chat/blocs/login/login.dart';
 import 'package:blaze_chat/blocs/home/home.dart';
 import 'package:blaze_chat/common/common.dart';
 
+import 'user_repository.dart';
 import 'blocs/settings/settings.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  final userRepository = UserRepository();
+  final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) {
@@ -28,9 +28,12 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  final UserRepository userRepository;
+  final UserRepository _userRepository;
 
-  App({Key key, @required this.userRepository}) : super(key: key);
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class App extends StatelessWidget {
             return HomePage();
           }
           if (state is AuthenticationUnauthenticated) {
-            return LoginPage(userRepository: userRepository);
+            return LoginPage(userRepository: _userRepository);
           }
           if (state is AuthenticationLoading) {
             return LoadingIndicator();

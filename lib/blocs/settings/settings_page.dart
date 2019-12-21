@@ -2,7 +2,7 @@ import 'package:blaze_chat/common/common.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:blaze_chat/authentication/authentication.dart';
+import 'package:blaze_chat/blocs/authentication/authentication.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
