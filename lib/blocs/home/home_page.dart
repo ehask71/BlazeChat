@@ -1,18 +1,18 @@
+import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
 import 'package:blaze_chat/common/common.dart';
+import 'package:blaze_chat/user_repository.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:blaze_chat/blocs/authentication/authentication.dart';
 
 class HomePage extends StatelessWidget {
-  final String displayName;
-
-  HomePage({Key key, @required this.displayName}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final UserRepository userRepository = UserRepository();
+
     return Scaffold(
-      drawer: AppDrawer(displayName: this.displayName),
+      drawer: AppDrawerPage(userRepository: userRepository),
       appBar: AppBar(
         title: Text('ILMC Groups'),
       ),

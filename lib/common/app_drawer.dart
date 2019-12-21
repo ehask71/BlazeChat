@@ -20,13 +20,11 @@ class AppDrawer extends StatelessWidget {
           _createDrawerItem(
               icon: Icons.contacts,
               text: 'Chats',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, '/')),
+              onTap: () => Navigator.pushReplacementNamed(context, '/')),
           _createDrawerItem(
               icon: Icons.event,
               text: 'Add Chat',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, '/addchat')),
+              onTap: () => Navigator.pushReplacementNamed(context, '/addchat')),
           _createDrawerItem(icon: Icons.recent_actors, text: 'Archive'),
           Divider(),
           _createDrawerItem(icon: Icons.help_outline, text: 'Help'),
@@ -35,7 +33,7 @@ class AppDrawer extends StatelessWidget {
               text: 'Settings',
               onTap: () =>
                   Navigator.pushReplacementNamed(context, '/settings')),
-         /* _createDrawerItem(
+          /* _createDrawerItem(
             icon: Icons.reply_all,
             text: 'Logout',
             onTap: () => BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut())
@@ -50,7 +48,10 @@ class AppDrawer extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () => BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut()),
+            onTap: () {
+              Navigator.of(context).pop();
+              BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+            },
           ),
           ListTile(
             title: Text('0.0.1'),
@@ -97,5 +98,4 @@ class AppDrawer extends StatelessWidget {
       onTap: onTap,
     );
   }
-
 }
