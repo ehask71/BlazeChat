@@ -18,21 +18,20 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
 
-  runApp(
-      MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthenticationBloc>(
-            create: (context) => AuthenticationBloc(userRepository: userRepository)
-            ..add(AppStarted()),
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<AuthenticationBloc>(
+        create: (context) => AuthenticationBloc(userRepository: userRepository)
+          ..add(AppStarted()),
+      ),
+      BlocProvider<AppDrawerBloc>(
+          create: (context) => AppDrawerBloc(userRepository)
+          //..add(InitialAppDrawer()),
           ),
-          BlocProvider<AppDrawerBloc>(
-            create: (context) => AppDrawerBloc(userRepository: userRepository)
-              //..add(InitialAppDrawer()),
-          ),
-        ],
-        child: App(userRepository: userRepository),
-      )
-    /*BlocProvider<AuthenticationBloc>(
+    ],
+    child: App(userRepository: userRepository),
+  )
+      /*BlocProvider<AuthenticationBloc>(
       create: (context) {
         return AuthenticationBloc(userRepository: userRepository)
           ..add(AppStarted());
@@ -40,7 +39,7 @@ void main() {
       child: App(userRepository: userRepository),
     ),*/
 
-  );
+      );
 }
 
 class App extends StatelessWidget {
@@ -65,7 +64,14 @@ class App extends StatelessWidget {
           primaryTextTheme: TextTheme(
               title: TextStyle(color: Colors.yellow[800]),
               body1: TextStyle(color: Colors.yellow[800]))),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      home: BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            print('Listener:' + state.toString());
+            if(state is AuthenticationState)
+            {
+              BlocProvider.of<AppDrawerBloc>(context).add(LoadingAppDrawer());
+            }
+      }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is AuthenticationAuthenticated) {
             return HomePage();
@@ -78,7 +84,7 @@ class App extends StatelessWidget {
           }
           return SplashPage();
         },
-      ),
+      )),
     );
   }
 }

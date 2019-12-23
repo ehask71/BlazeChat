@@ -9,8 +9,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserRepository userRepository = UserRepository();
-    final AppDrawerBloc appDrawer = AppDrawerBloc(userRepository: userRepository);
-    appDrawer.add(LoadingAppDrawer());
 
     return Scaffold(
       drawer: AppDrawerPage(userRepository: userRepository),
