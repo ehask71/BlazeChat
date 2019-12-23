@@ -1,4 +1,5 @@
 import 'package:blaze_chat/blocs/addchat/addchat.dart';
+import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
@@ -16,14 +17,29 @@ import 'blocs/settings/settings.dart';
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
+
   runApp(
-    BlocProvider<AuthenticationBloc>(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(
+            create: (context) => AuthenticationBloc(userRepository: userRepository)
+            ..add(AppStarted()),
+          ),
+          BlocProvider<AppDrawerBloc>(
+            create: (context) => AppDrawerBloc(userRepository: userRepository)
+              //..add(InitialAppDrawer()),
+          ),
+        ],
+        child: App(userRepository: userRepository),
+      )
+    /*BlocProvider<AuthenticationBloc>(
       create: (context) {
         return AuthenticationBloc(userRepository: userRepository)
           ..add(AppStarted());
       },
       child: App(userRepository: userRepository),
-    ),
+    ),*/
+
   );
 }
 

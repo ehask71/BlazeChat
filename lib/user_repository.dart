@@ -61,6 +61,7 @@ class UserRepository {
 
   Future<String> getUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    print('UserRepository: getUser');
     return prefs.getString('roadname');
   }
 }
