@@ -1,4 +1,5 @@
 import 'package:blaze_chat/blocs/appdrawer/app_drawer_bloc.dart';
+import 'package:blaze_chat/blocs/appdrawer/app_drawer_state.dart';
 import 'package:blaze_chat/blocs/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,61 +15,77 @@ class AppDrawerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    return BlocProvider(
-        create: (context) {
-          return AppDrawerBloc(
-            userRepository: userRepository,
-          );
-        },
-        child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              _createHeader('Rant'),
-              _createDrawerItem(
-                  icon: Icons.contacts,
-                  text: 'Chats',
-                  onTap: () => Navigator.pushReplacementNamed(context, '/')),
-              _createDrawerItem(
-                  icon: Icons.event,
-                  text: 'Add Chat',
-                  onTap: () =>
-                      Navigator.pushReplacementNamed(context, '/addchat')),
-              _createDrawerItem(icon: Icons.recent_actors, text: 'Archive'),
-              Divider(),
-              _createDrawerItem(icon: Icons.help_outline, text: 'Help'),
-              _createDrawerItem(
-                  icon: Icons.build,
-                  text: 'Settings',
-                  onTap: () =>
-                      Navigator.pushReplacementNamed(context, '/settings')),
-              /* _createDrawerItem(
+    return BlocBuilder<AppDrawerBloc, AppDrawerState>(
+        bloc: BlocProvider.of<AppDrawerBloc>(context),
+        builder: (BuildContext context, AppDrawerState state) {
+          if (state is LoadingAppDrawerState) {
+            return Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Center(child: CircularProgressIndicator()));
+          }
+          if (state is ErrorAppDrawerState) {
+            return Text('Error!');
+          }
+          if (state is LoadedAppDrawerState) {
+            //return Text('app');
+            print('Loaded Drawer');
+            return Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  _createHeader('Rant'),
+                  _createDrawerItem(
+                      icon: Icons.contacts,
+                      text: 'Chats',
+                      onTap: () =>
+                          Navigator.pushReplacementNamed(context, '/')),
+                  _createDrawerItem(
+                      icon: Icons.event,
+                      text: 'Add Chat',
+                      onTap: () =>
+                          Navigator.pushReplacementNamed(context, '/addchat')),
+                  _createDrawerItem(icon: Icons.recent_actors, text: 'Archive'),
+                  Divider(),
+                  _createDrawerItem(icon: Icons.help_outline, text: 'Help'),
+                  _createDrawerItem(
+                      icon: Icons.build,
+                      text: 'Settings',
+                      onTap: () =>
+                          Navigator.pushReplacementNamed(context, '/settings')),
+                  /* _createDrawerItem(
             icon: Icons.reply_all,
             text: 'Logout',
             onTap: () => BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut())
           ),*/
-              ListTile(
-                title: Row(
-                  children: <Widget>[
-                    Icon(Icons.reply_all),
-                    Padding(
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text('Logout'),
-                    )
-                  ],
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
-                },
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Icon(Icons.reply_all),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text('Logout'),
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      BlocProvider.of<AuthenticationBloc>(context)
+                          .add(LoggedOut());
+                    },
+                  ),
+                  ListTile(
+                    title: Text('0.0.1'),
+                    onTap: () {},
+                  ),
+                ],
               ),
-              ListTile(
-                title: Text('0.0.1'),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ));
+            );
+          } else {
+            return Container(
+              child: Text('oops'),
+            );
+          }
+        });
   }
 
   Widget _createHeader(String name) {

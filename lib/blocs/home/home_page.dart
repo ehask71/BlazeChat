@@ -1,5 +1,4 @@
 import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
-import 'package:blaze_chat/common/common.dart';
 import 'package:blaze_chat/user_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +9,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserRepository userRepository = UserRepository();
+    final AppDrawerBloc appDrawer = AppDrawerBloc(userRepository: userRepository);
+    appDrawer.add(LoadingAppDrawer());
 
     return Scaffold(
       drawer: AppDrawerPage(userRepository: userRepository),

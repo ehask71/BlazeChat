@@ -11,8 +11,7 @@ class AuthenticationBloc
   final UserRepository _userRepository;
 
   AuthenticationBloc({@required userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+      : assert(userRepository != null),_userRepository = userRepository;
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();
@@ -25,7 +24,9 @@ class AuthenticationBloc
       final bool hasToken = await _userRepository.hasToken();
       await Future.delayed(Duration(milliseconds: 2000));
       if (hasToken) {
-        yield AuthenticationAuthenticated(await _userRepository.getUser());
+        print('Has Token called in AppStarted');
+        //_appDrawerBloc.add(LoadingAppDrawer());
+        yield AuthenticationAuthenticated();
       } else {
         yield AuthenticationUnauthenticated();
       }
@@ -34,7 +35,8 @@ class AuthenticationBloc
     if (event is LoggedIn) {
       yield AuthenticationLoading();
       await _userRepository.persistToken(event.token);
-      yield AuthenticationAuthenticated(await _userRepository.getUser());
+      /*_appDrawerBloc.add(LoadingAppDrawer());*/
+      yield AuthenticationAuthenticated();
     }
 
     if (event is LoggedOut) {
