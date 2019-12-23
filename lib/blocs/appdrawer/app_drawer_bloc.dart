@@ -1,4 +1,3 @@
-import 'package:blaze_chat/blocs/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
@@ -7,12 +6,9 @@ import 'package:blaze_chat/user_repository.dart';
 
 
 class AppDrawerBloc extends Bloc<AppDrawerEvent, AppDrawerState>  {
-  final UserRepository _userRepository;
+  UserRepository _userRepository;
 
-  AppDrawerBloc({@required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
-
+  AppDrawerBloc(this._userRepository);
 
   @override
   AppDrawerState get initialState => InitialAppDrawerState();
@@ -24,9 +20,6 @@ class AppDrawerBloc extends Bloc<AppDrawerEvent, AppDrawerState>  {
     }
     if(event is LoadingAppDrawer){
       yield* _mapLoadingAppDrawerState();
-    }
-    if(event is LoadedAppDrawer){
-      print('Done');
     }
 
   }
