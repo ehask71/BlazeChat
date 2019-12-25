@@ -14,7 +14,7 @@ class AppDrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    final AppDrawerBloc appDrawerBloc = BlocProvider.of<AppDrawerBloc>(context);
     return BlocBuilder<AppDrawerBloc, AppDrawerState>(
         bloc: BlocProvider.of<AppDrawerBloc>(context),
         builder: (BuildContext context, AppDrawerState state) {
@@ -29,11 +29,31 @@ class AppDrawerPage extends StatelessWidget {
           if (state is LoadedAppDrawerState) {
             //return Text('app');
             print('Loaded Drawer');
+            print(state);
+            print('End State');
+            final String displayName = 'User';//= state.displayName ? state.displayName:'User';
             return Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-                  _createHeader('Rant'),
+                  DrawerHeader(
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage(
+                                  'assets/images/Hellfire-Eight-4inch.png'))),
+                      child: Stack(children: <Widget>[
+                        Positioned(
+                            bottom: 12.0,
+                            left: 16.0,
+                            child: Text(displayName,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w500))),
+                      ])),
                   _createDrawerItem(
                       icon: Icons.contacts,
                       text: 'Chats',

@@ -28,7 +28,7 @@ class LoadedAppDrawerState extends AppDrawerState {
   List<Object> get props => [displayName];
 
   @override
-  String toString() => 'LoadedAppDrawerState {user: $displayName}';
+  String toString() => 'LoadedAppDrawerState {displayName: $displayName}';
 }
 class ErrorAppDrawerState extends AppDrawerState {
   ErrorAppDrawerState();

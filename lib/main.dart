@@ -66,12 +66,12 @@ class App extends StatelessWidget {
               body1: TextStyle(color: Colors.yellow[800]))),
       home: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            print('Listener:' + state.toString());
-            if(state is AuthenticationState)
-            {
-              BlocProvider.of<AppDrawerBloc>(context).add(LoadingAppDrawer());
-            }
-      }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        print('Listener:' + state.toString());
+        if (state is AuthenticationState) {
+          BlocProvider.of<AppDrawerBloc>(context).add(LoadingAppDrawer());
+        }
+      },
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is AuthenticationAuthenticated) {
             return HomePage();
