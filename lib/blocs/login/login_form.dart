@@ -38,31 +38,37 @@ class _LoginFormState extends State<LoginForm> {
           return Form(
               child: Container(
             margin: new EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Hero(
-                    tag: 'hero',
-                    child: Image.asset('assets/images/A4114A.png')),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Email'),
-                  controller: _usernameController,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Password'),
-                  controller: _passwordController,
-                  obscureText: true,
-                ),
-                RaisedButton(
-                  onPressed:
-                      state is! LoginLoading ? _onLoginButtonPressed : null,
-                  child: Text('Login'),
-                ),
-                Container(
-                  child: state is LoginLoading
-                      ? CircularProgressIndicator()
-                      : null,
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Hero(
+                      tag: 'hero',
+                      child: Image.asset('assets/images/A4114A.png')),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Email'),
+                    controller: _usernameController,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Password'),
+                    controller: _passwordController,
+                    obscureText: true,
+                  ),
+                  ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(minWidth: double.infinity),
+                      child: RaisedButton(
+                        onPressed: state is! LoginLoading
+                            ? _onLoginButtonPressed
+                            : null,
+                        child: Text('Login'),
+                      )),
+                  Container(
+                    child: state is LoginLoading
+                        ? CircularProgressIndicator()
+                        : null,
+                  ),
+                ],
+              ),
             ),
           ));
         },

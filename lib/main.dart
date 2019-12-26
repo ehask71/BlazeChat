@@ -63,7 +63,12 @@ class App extends StatelessWidget {
           primarySwatch: primaryBlack,
           primaryTextTheme: TextTheme(
               title: TextStyle(color: Colors.yellow[800]),
-              body1: TextStyle(color: Colors.yellow[800]))),
+              body1: TextStyle(color: Colors.yellow[800])),
+          buttonTheme: ButtonThemeData(
+            buttonColor: Colors.yellow[800],
+            textTheme: ButtonTextTheme.primary
+          )
+      ),
       home: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
         print('Listener:' + state.toString());
