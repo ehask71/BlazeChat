@@ -38,7 +38,6 @@ class AuthApiProvider {
     final String decoded = B64urlEncRfc7515.decodeUtf8(payload);
     final payloadMap = jsonDecode(decoded);
 
-    print(payloadMap);
     return payloadMap['exp'];
   }
 }

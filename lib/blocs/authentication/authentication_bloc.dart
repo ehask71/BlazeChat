@@ -14,36 +14,43 @@ class AuthenticationBloc
       : assert(userRepository != null),_userRepository = userRepository;
 
   @override
-  AuthenticationState get initialState => AuthenticationUninitialized();
+  AuthenticationState get initialState => Uninitialized();
 
   @override
   Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
+      AuthenticationEvent event,
+      ) async* {
     if (event is AppStarted) {
-      final bool hasToken = await _userRepository.hasToken();
       await Future.delayed(Duration(milliseconds: 2000));
-      if (hasToken) {
-        print('Has Token called in AppStarted');
-        //_appDrawerBloc.add(LoadingAppDrawer());
-        yield AuthenticationAuthenticated();
+      yield* _mapAppStartedToState();
+    } else if (event is LoggedIn) {
+      yield* _mapLoggedInToState();
+    } else if (event is LoggedOut) {
+      yield* _mapLoggedOutToState();
+    }
+  }
+
+  Stream<AuthenticationState> _mapAppStartedToState() async* {
+    try {
+      final isSignedIn = await _userRepository.isSignedIn();
+      if (isSignedIn) {
+        final name = await _userRepository.getUser();
+        yield Authenticated(name);
       } else {
-        yield AuthenticationUnauthenticated();
+        yield Unauthenticated();
       }
+    } catch (_) {
+      yield Unauthenticated();
     }
+  }
 
-    if (event is LoggedIn) {
-      yield AuthenticationLoading();
-      await _userRepository.persistToken(event.token);
-      /*_appDrawerBloc.add(LoadingAppDrawer());*/
-      yield AuthenticationAuthenticated();
-    }
+  Stream<AuthenticationState> _mapLoggedInToState() async* {
+    yield Authenticated(await _userRepository.getUser());
+  }
 
-    if (event is LoggedOut) {
-      yield AuthenticationLoading();
-      await _userRepository.deleteToken();
-      yield AuthenticationUnauthenticated();
-    }
+  Stream<AuthenticationState> _mapLoggedOutToState() async* {
+    _userRepository.signOut();
+    yield Unauthenticated();
   }
 
 }

@@ -30,8 +30,9 @@ class AppDrawerPage extends StatelessWidget {
             //return Text('app');
             print('Loaded Drawer');
             print(state);
+            print(state.displayName);
             print('End State');
-            final String displayName = 'User';//= state.displayName ? state.displayName:'User';
+            final String displayName = state.displayName;
             return Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,

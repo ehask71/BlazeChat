@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:blaze_chat/user_repository.dart';
-
-import 'package:blaze_chat/blocs/authentication/authentication.dart';
 import 'package:blaze_chat/blocs/login/login.dart';
 
 class LoginPage extends StatelessWidget {
-  final UserRepository userRepository;
+  final UserRepository _userRepository;
 
-  LoginPage({Key key, @required this.userRepository})
+  LoginPage({Key key, @required userRepository})
       : assert(userRepository != null),
+        _userRepository = userRepository,
         super(key: key);
 
   @override
@@ -22,11 +21,10 @@ class LoginPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) {
           return LoginBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            userRepository: userRepository,
+            userRepository: _userRepository,
           );
         },
-        child: LoginForm(),
+        child: LoginForm(userRepository: _userRepository),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:blaze_chat/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:blaze_chat/blocs/login/login.dart';
+import 'package:blaze_chat/blocs/authentication/authentication.dart';
 
 class LoginForm extends StatefulWidget {
   final UserRepository _userRepository;
@@ -16,12 +17,15 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   LoginBloc _loginBloc;
 
+  UserRepository get _userRepository => widget._userRepository;
+
   bool get isPopulated =>
-      _usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   bool isLoginButtonEnabled(LoginState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -31,46 +35,63 @@ class _LoginFormState extends State<LoginForm> {
   void initState() {
     super.initState();
     _loginBloc = BlocProvider.of<LoginBloc>(context);
-    _usernameController.addListener(_onUsernameChanged);
+    _emailController.addListener(_onUsernameChanged);
     _passwordController.addListener(_onPasswordChanged);
   }
 
   @override
   Widget build(BuildContext context) {
-    _onLoginButtonPressed() {
-      BlocProvider.of<LoginBloc>(context).add(
-        LoginButtonPressed(
-          username: _usernameController.text,
-          password: _passwordController.text,
-        ),
-      );
-    }
-
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state is LoginFailure) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${state.error}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+        if (state.isFailure) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text('Login Failure'), Icon(Icons.error)],
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+        }
+        if (state.isSubmitting) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Logging In...'),
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            );
+        }
+        if (state.isSuccess) {
+          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return Form(
-              child: Container(
-            margin: new EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Hero(
-                      tag: 'hero',
-                      child: Image.asset('assets/images/A4114A.png')),
+          return Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Form(
+              child: ListView(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Image.asset('assets/images/A4114A.png', height: 200),
+                  ),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Email'),
-                    controller: _usernameController,
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.email),
+                      labelText: 'Email',
+                    ),
                     keyboardType: TextInputType.emailAddress,
                     autovalidate: true,
                     autocorrect: false,
@@ -79,8 +100,11 @@ class _LoginFormState extends State<LoginForm> {
                     },
                   ),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Password'),
                     controller: _passwordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'Password',
+                    ),
                     obscureText: true,
                     autovalidate: true,
                     autocorrect: false,
@@ -88,24 +112,25 @@ class _LoginFormState extends State<LoginForm> {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
                   ),
-                  ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(minWidth: double.infinity),
-                      child: RaisedButton(
-                        onPressed: state is! LoginLoading
-                            ? _onLoginButtonPressed
-                            : null,
-                        child: Text('Login'),
-                      )),
-                  Container(
-                    child: state is LoginLoading
-                        ? CircularProgressIndicator()
-                        : null,
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        LoginButton(
+                          onPressed: isLoginButtonEnabled(state)
+                              ? _onFormSubmitted
+                              : null,
+                        ),
+                        //GoogleLoginButton(),
+                        //CreateAccountButton(userRepository: _userRepository),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ));
+          );
         },
       ),
     );
@@ -113,14 +138,14 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   void _onUsernameChanged() {
     _loginBloc.add(
-      UsernameChanged(email: _usernameController.text),
+      EmailChanged(email: _emailController.text),
     );
   }
 
@@ -132,9 +157,10 @@ class _LoginFormState extends State<LoginForm> {
 
   void _onFormSubmitted() {
     _loginBloc.add(
-      LoginButtonPressed(
-        username: _usernameController.text,
+      LoginWithCredentialsPressed(
+        email: _emailController.text,
         password: _passwordController.text,
       ),
     );
+  }
 }

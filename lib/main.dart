@@ -15,6 +15,7 @@ import 'user_repository.dart';
 import 'blocs/settings/settings.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
 
@@ -30,16 +31,7 @@ void main() {
           ),
     ],
     child: App(userRepository: userRepository),
-  )
-      /*BlocProvider<AuthenticationBloc>(
-      create: (context) {
-        return AuthenticationBloc(userRepository: userRepository)
-          ..add(AppStarted());
-      },
-      child: App(userRepository: userRepository),
-    ),*/
-
-      );
+  ));
 }
 
 class App extends StatelessWidget {
@@ -65,28 +57,25 @@ class App extends StatelessWidget {
               title: TextStyle(color: Colors.yellow[800]),
               body1: TextStyle(color: Colors.yellow[800])),
           buttonTheme: ButtonThemeData(
-            buttonColor: Colors.yellow[800],
-            textTheme: ButtonTextTheme.primary
-          )
-      ),
+              buttonColor: Colors.yellow[800],
+              textTheme: ButtonTextTheme.primary)),
       home: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-        print('Listener:' + state.toString());
-        if (state is AuthenticationState) {
+        //print('Listener:' + state.toString());
+        if (state is Authenticated) {
           BlocProvider.of<AppDrawerBloc>(context).add(LoadingAppDrawer());
         }
-      },
-          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          if (state is AuthenticationAuthenticated) {
+          if (state is Authenticated) {
             return HomePage();
           }
-          if (state is AuthenticationUnauthenticated) {
+          if (state is Unauthenticated) {
             return LoginPage(userRepository: _userRepository);
           }
-          if (state is AuthenticationLoading) {
+          /*if (state is AuthenticationLoading) {
             return LoadingIndicator();
-          }
+          }*/
           return SplashPage();
         },
       )),

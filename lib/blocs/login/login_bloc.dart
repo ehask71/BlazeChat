@@ -1,42 +1,75 @@
 import 'dart:async';
-
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:blaze_chat/user_repository.dart';
-
+import 'package:rxdart/rxdart.dart';
 import 'package:blaze_chat/blocs/authentication/authentication.dart';
 import 'package:blaze_chat/blocs/login/login.dart';
+import 'package:blaze_chat/validators.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final UserRepository userRepository;
-  final AuthenticationBloc authenticationBloc;
+  UserRepository _userRepository;
 
-  LoginBloc({
-    @required this.userRepository,
-    @required this.authenticationBloc,
-  })  : assert(userRepository != null),
-        assert(authenticationBloc != null);
+  LoginBloc({@required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository;
 
   @override
-  LoginState get initialState => LoginInitial();
+  LoginState get initialState => LoginState.empty();
+
+  @override
+  Stream<LoginState> transformEvents(
+    Stream<LoginEvent> events,
+    Stream<LoginState> Function(LoginEvent event) next,
+  ) {
+    final nonDebounceStream = events.where((event) {
+      return (event is! EmailChanged && event is! PasswordChanged);
+    });
+    final debounceStream = events.where((event) {
+      return (event is EmailChanged || event is PasswordChanged);
+    }).debounceTime(Duration(milliseconds: 300));
+    return super.transformEvents(
+      nonDebounceStream.mergeWith([debounceStream]),
+      next,
+    );
+  }
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginButtonPressed) {
-      yield LoginLoading();
+    if (event is EmailChanged) {
+      yield* _mapEmailChangedToState(event.email);
+    } else if (event is PasswordChanged) {
+      yield* _mapPasswordChangedToState(event.password);
+    } else if (event is LoginWithCredentialsPressed) {
+      yield* _mapLoginWithCredentialsPressedToState(
+        email: event.email,
+        password: event.password,
+      );
+    }
+  }
 
-      try {
-        final token = await userRepository.authenticate(
-          username: event.username,
-          password: event.password,
-        );
+  Stream<LoginState> _mapEmailChangedToState(String email) async* {
+    yield state.update(
+      isEmailValid: Validators.isValidEmail(email),
+    );
+  }
 
-        authenticationBloc.add(LoggedIn(token: token));
-        yield LoginInitial();
-      } catch (error,stacktrace) {
-        print('Login BLoC: '+error.message + ' ' + stacktrace.toString());
-        yield LoginFailure(error: error.toString());
-      }
+  Stream<LoginState> _mapPasswordChangedToState(String password) async* {
+    yield state.update(
+      isPasswordValid: Validators.isValidPassword(password),
+    );
+  }
+
+  Stream<LoginState> _mapLoginWithCredentialsPressedToState({
+    String email,
+    String password,
+  }) async* {
+    yield LoginState.loading();
+    try {
+      await _userRepository.authenticate(email, password);
+      yield LoginState.success();
+    } catch (_) {
+      yield LoginState.failure();
     }
   }
 }

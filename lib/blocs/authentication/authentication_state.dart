@@ -7,19 +7,18 @@ abstract class AuthenticationState extends Equatable {
   List<Object> get props => [];
 }
 
-class AuthenticationUninitialized extends AuthenticationState {}
+class Uninitialized extends AuthenticationState {}
 
-class AuthenticationAuthenticated extends AuthenticationState {
+class Authenticated extends AuthenticationState {
+  final String displayName;
 
-  const AuthenticationAuthenticated();
-
-  @override
-  List<Object> get props => [];
+  const Authenticated(this.displayName);
 
   @override
-  String toString() => 'Authenticated';
+  List<Object> get props => [displayName];
+
+  @override
+  String toString() => 'Authenticated { displayName: $displayName }';
 }
 
-class AuthenticationUnauthenticated extends AuthenticationState {}
-
-class AuthenticationLoading extends AuthenticationState {}
+class Unauthenticated extends AuthenticationState {}
