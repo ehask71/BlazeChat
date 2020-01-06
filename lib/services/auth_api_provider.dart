@@ -1,18 +1,23 @@
 import 'dart:convert';
 import 'package:blaze_chat/common/common.dart';
 import 'package:blaze_chat/models/login.dart';
+import 'package:http_interceptor/http_client_with_interceptor.dart';
+import 'package:http_interceptor/http_interceptor.dart';
 import 'package:http/http.dart' as http;
+import 'package:blaze_chat/common/api_interceptor.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 
 class AuthApiProvider {
   final String _endpoint = 'https://api.ironlegacymc.com/api/auth/login';
+  HttpClientWithInterceptor client = HttpClientWithInterceptor.build(interceptors: [ApiInterceptor()]);
+
   Future<dynamic> getToken(username, password) async {
     try {
       Map<String, String> body = {
         'email': username.trim(),
         'password': password.trim(),
       };
-      final response = await http.post(
+      final response = await client.post(
         _endpoint,
         body: body,
       );

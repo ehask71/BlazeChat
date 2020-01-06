@@ -62,6 +62,14 @@ class UserRepository {
     return prefs.getString('roadname');
   }
 
+  Future<String> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final _token = prefs.getString('token');
+    if (_token.length > 0) {
+      return _token;
+    }
+  }
+
   Future<bool> isSignedIn() async {
     print("isSignedIn called");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
