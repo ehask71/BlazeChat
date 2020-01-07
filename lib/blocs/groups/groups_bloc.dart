@@ -29,13 +29,8 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   }
 
   Stream<GroupsState> _mapLoadGroupsToState() async* {
+
     yield GroupsLoaded();
   }
 
-  Future<List<Group>> _fetchGroups(int startIndex, int limit) async {
-
-    final token = await _userRepository.getToken();
-    final response = await _httpClient.get(
-        Constants().API +'groups?_start=$startIndex&_limit=$limit');
-  }
 }
