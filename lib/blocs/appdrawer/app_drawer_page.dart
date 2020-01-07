@@ -15,6 +15,8 @@ class AppDrawerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppDrawerBloc appDrawerBloc = BlocProvider.of<AppDrawerBloc>(context);
+    final AuthenticationBloc authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+
     return BlocBuilder<AppDrawerBloc, AppDrawerState>(
         bloc: BlocProvider.of<AppDrawerBloc>(context),
         builder: (BuildContext context, AppDrawerState state) {
