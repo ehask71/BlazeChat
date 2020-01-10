@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:blaze_chat/user_repository.dart';
+import 'package:blaze_chat/group_repository.dart';
 import 'groups.dart';
 import 'package:blaze_chat/common/constants.dart';
 
