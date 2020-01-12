@@ -20,4 +20,4 @@ class GroupsLoaded extends GroupsState {
       'GroupsLoaded { posts: ${groups.length} }';
 }
 
-class GroupsNotLoaded extends GroupsState {}
+class NotLoaded extends GroupsState {}

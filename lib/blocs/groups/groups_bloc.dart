@@ -20,18 +20,26 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         _userRepository = userRepository,assert(httpClient != null),_httpClient = httpClient;
 
   @override
-  GroupsState get initialState => GroupsNotLoaded();
+  GroupsState get initialState => NotLoaded();
 
   @override
   Stream<GroupsState> mapEventToState(GroupsEvent event) async* {
     if(event is LoadGroups){
       yield* _mapLoadGroupsToState();
     }
+    if(event is NotLoaded){
+      yield* _mapGroupsNotLoadedToState();
+    }
   }
 
   Stream<GroupsState> _mapLoadGroupsToState() async* {
 
     yield GroupsLoaded();
+  }
+
+  Stream<GroupsState> _mapGroupsNotLoadedToState() async* {
+
+    yield NotLoaded();
   }
 
 }
