@@ -10,6 +10,8 @@ abstract class GroupsEvent extends Equatable {
 
 class LoadGroups extends GroupsEvent {}
 
+class LoadedGroups extends GroupsEvent {}
+
 class UpdateGroups extends GroupsEvent {}
 
 class GroupsNotLoaded extends GroupsEvent {}

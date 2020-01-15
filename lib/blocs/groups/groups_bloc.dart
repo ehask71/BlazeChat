@@ -27,12 +27,20 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     if(event is LoadGroups){
       yield* _mapLoadGroupsToState();
     }
+    if(event is LoadedGroups){
+      yield* _mapLoadedGroupsToState();
+    }
     if(event is NotLoaded){
       yield* _mapGroupsNotLoadedToState();
     }
   }
 
   Stream<GroupsState> _mapLoadGroupsToState() async* {
+
+    yield GroupsLoading();
+  }
+
+  Stream<GroupsState> _mapLoadedGroupsToState() async* {
 
     yield GroupsLoaded();
   }
