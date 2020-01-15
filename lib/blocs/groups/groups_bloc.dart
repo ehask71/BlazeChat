@@ -37,7 +37,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
 
   Stream<GroupsState> _mapLoadGroupsToState() async* {
 
-    yield GroupsLoading();
+    yield GroupsLoaded();
   }
 
   Stream<GroupsState> _mapLoadedGroupsToState() async* {
