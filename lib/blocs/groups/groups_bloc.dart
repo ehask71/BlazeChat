@@ -1,34 +1,30 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:blaze_chat/blocs/groups/groups.dart';
+import 'package:blaze_chat/blocs/home/home.dart';
 import 'package:blaze_chat/models/group.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:blaze_chat/user_repository.dart';
 import 'package:blaze_chat/group_repository.dart';
 import 'groups.dart';
-import 'package:blaze_chat/common/constants.dart';
 
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   final UserRepository _userRepository;
-  final http.Client _httpClient;
+  final GroupRepository _groupRepository = GroupRepository();
 
-  GroupsBloc({@required UserRepository userRepository,@required httpClient})
+  GroupsBloc({@required UserRepository userRepository})
       : assert(userRepository != null),
-        _userRepository = userRepository,assert(httpClient != null),_httpClient = httpClient;
+        _userRepository = userRepository;
 
   @override
-  GroupsState get initialState => NotLoaded();
+  GroupsState get initialState => GroupsLoading();
 
   @override
   Stream<GroupsState> mapEventToState(GroupsEvent event) async* {
     if(event is LoadGroups){
       yield* _mapLoadGroupsToState();
-    }
-    if(event is LoadedGroups){
-      yield* _mapLoadedGroupsToState();
     }
     if(event is NotLoaded){
       yield* _mapGroupsNotLoadedToState();
@@ -36,13 +32,16 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   }
 
   Stream<GroupsState> _mapLoadGroupsToState() async* {
-
-    yield GroupsLoaded();
-  }
-
-  Stream<GroupsState> _mapLoadedGroupsToState() async* {
-
-    yield GroupsLoaded();
+    try {
+      print('_mapLoadGroupsToState: Enter');
+      final _groups = await _groupRepository.fetchGroups(0, 25);
+      print(_groups);
+      yield GroupsLoaded(groups: _groups);
+    } catch (error,stacktrace){
+      print(error.toString());
+      print(stacktrace.toString());
+      yield NotLoaded();
+    }
   }
 
   Stream<GroupsState> _mapGroupsNotLoadedToState() async* {

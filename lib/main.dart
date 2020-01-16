@@ -9,6 +9,7 @@ import 'package:blaze_chat/blocs/authentication/authentication.dart';
 import 'package:blaze_chat/blocs/splash/splash.dart';
 import 'package:blaze_chat/blocs/login/login.dart';
 import 'package:blaze_chat/blocs/home/home.dart';
+import 'package:blaze_chat/blocs/groups/groups.dart';
 import 'package:blaze_chat/common/common.dart';
 
 import 'user_repository.dart';
@@ -29,6 +30,9 @@ void main() {
           create: (context) => AppDrawerBloc(userRepository)
           //..add(InitialAppDrawer()),
           ),
+      BlocProvider<GroupsBloc>(
+        create: (context) => GroupsBloc(userRepository: userRepository),
+      )
     ],
     child: App(userRepository: userRepository),
   ));
@@ -64,11 +68,12 @@ class App extends StatelessWidget {
         //print('Listener:' + state.toString());
         if (state is Authenticated) {
           BlocProvider.of<AppDrawerBloc>(context).add(LoadingAppDrawer());
+          BlocProvider.of<GroupsBloc>(context).add(LoadGroups());
         }
       }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is Authenticated) {
-            return HomePage();
+            return GroupsPage();
           }
           if (state is Unauthenticated) {
             return LoginPage(userRepository: _userRepository);

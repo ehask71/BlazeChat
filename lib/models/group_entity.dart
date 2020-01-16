@@ -3,7 +3,7 @@ class GroupEntity {
   final int id;
   final String title;
   final String image;
-  final bool status;
+  final int status;
   final String created;
 
   GroupEntity(this.id,this.title,this.image,this.status,this.created);
@@ -43,7 +43,7 @@ class GroupEntity {
       json["id"] as int,
       json["title"] as String,
       json["image"] as String,
-      json["status"] as bool,
+      json["status"] as int,
       json["created"] as String,
     );
   }
