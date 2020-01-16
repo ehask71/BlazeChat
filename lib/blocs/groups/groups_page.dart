@@ -42,7 +42,10 @@ class _GroupList extends StatelessWidget {
                   leading: (state.groups[index].image == "")? CircleAvatar(backgroundImage: AssetImage('assets/images/Hellfire-Eight-4inch.png'),radius: 35):CircleAvatar(backgroundImage: NetworkImage(state.groups[index].image)),
                   title: Text(state.groups[index].title,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   subtitle: Text('coming soon'),
-                  onTap: (){print("Clicked:"+ state.groups[index].id.toString());},
+                  onTap: (){
+                    print("Clicked:"+ state.groups[index].id.toString());
+                    Navigator.pushReplacementNamed(context, '/group');
+                    },
             )));
       }
       return Text('Something Failed!!');
