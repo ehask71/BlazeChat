@@ -10,6 +10,7 @@ import 'package:blaze_chat/blocs/splash/splash.dart';
 import 'package:blaze_chat/blocs/login/login.dart';
 import 'package:blaze_chat/blocs/home/home.dart';
 import 'package:blaze_chat/blocs/groups/groups.dart';
+import 'package:blaze_chat/blocs/group/group.dart';
 import 'package:blaze_chat/common/common.dart';
 
 import 'user_repository.dart';
@@ -54,6 +55,7 @@ class App extends StatelessWidget {
       routes: {
         '/addchat': (context) => AddChatPage(),
         '/settings': (context) => SettingsPage(),
+        '/group': (context) => GroupPage()
       },
       theme: new ThemeData(
           primarySwatch: primaryBlack,
