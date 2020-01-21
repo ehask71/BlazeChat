@@ -32,6 +32,7 @@ dependencies:
   rxdart: ^0.23.0
   http_interceptor: any
   image_picker: ^0.6.3+1
+  flutter_spinkit: "^2.1.0"
 
 dev_dependencies:
   flutter_test:

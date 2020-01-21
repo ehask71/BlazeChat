@@ -2,6 +2,7 @@ import 'package:blaze_chat/blocs/groups/groups.dart';
 import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
 import 'package:blaze_chat/user_repository.dart';
 import 'package:blaze_chat/blocs/group/group.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +34,12 @@ class _GroupList extends StatelessWidget {
         builder: (context,state){
           print(state.toString());
       if(state is GroupsLoading){
-        return CircularProgressIndicator();
+        return Center(
+            child:SpinKitWanderingCubes(
+              color: Colors.black,
+              size: 50.0,
+            )
+        );
       }
       if(state is GroupsLoaded){
         return ListView.builder(

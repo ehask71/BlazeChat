@@ -20,10 +20,7 @@ class GroupPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(args.title),
         ),
-        body: Container(
-            margin: new EdgeInsets.all(5.0),
-            child: _MessageList()
-        ),
+        body: Container(margin: new EdgeInsets.all(5.0), child: _MessageList()),
         resizeToAvoidBottomInset: true,
         bottomNavigationBar: Transform.translate(
           offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
@@ -42,10 +39,10 @@ class GroupPage extends StatelessWidget {
                 ),
                 Expanded(
                     child: TextFormField(
-                      controller: _controller,
-                      decoration: new InputDecoration(
-                          contentPadding: const EdgeInsets.all(5)),
-                    )),
+                  controller: _controller,
+                  decoration: new InputDecoration(
+                      contentPadding: const EdgeInsets.all(5)),
+                )),
                 IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
@@ -56,8 +53,7 @@ class GroupPage extends StatelessWidget {
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 
   void submitText(context) async {
@@ -66,9 +62,7 @@ class GroupPage extends StatelessWidget {
       try {
         _controller.clear();
         FocusScope.of(context).unfocus();
-      } catch (e){
-
-      }
+      } catch (e) {}
     }
   }
 
@@ -90,26 +84,30 @@ class _MessageList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GroupArguments args = ModalRoute.of(context).settings.arguments;
-    /*return BlocBuilder<GroupBloc, GroupState>(
+
+    return BlocBuilder<GroupBloc, GroupState>(
         bloc: BlocProvider.of<GroupBloc>(context),
-        builder: (context,state){
+        builder: (context, state) {
           print(state.toString());
-          if(state is GroupLoading){
+          if (state is GroupLoading) {
             return CircularProgressIndicator();
           }
-          if(state is GroupLoaded){
+          if (state is GroupLoaded) {
             return ListView.builder(
                 itemCount: state.messages.length,
-                itemBuilder: (context,index) => Card(
-                    child:ListTile(
+                itemBuilder: (context, index) => Card(
+                        child: ListTile(
                       //leading: (state.messages[index].image == "")? CircleAvatar(backgroundImage: AssetImage('assets/images/Hellfire-Eight-4inch.png'),radius: 35):CircleAvatar(backgroundImage: NetworkImage(state.groups[index].image)),
-                      title: Text(state.messages[index].content,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      title: Text(state.messages[index].content,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       subtitle: Text('coming soon'),
-                      onTap: (){print("Clicked:"+ state.messages[index].id.toString());},
+                      onTap: () {
+                        print("Clicked:" + state.messages[index].id.toString());
+                      },
                     )));
           }
           return Text('Something Failed!!');
-        });*/
-    return Text('Group Page'+ args.id.toString());
+        });
   }
 }
