@@ -1,38 +1,96 @@
 import 'package:blaze_chat/blocs/group/group.dart';
 import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
 import 'package:blaze_chat/user_repository.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupPage extends StatelessWidget {
-  final String title;
-  final int id;
-
-  GroupPage(this.title,this.id);
+  static const routeName = '/group';
+  final _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final UserRepository userRepository = UserRepository();
+    final GroupArguments args = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
         drawer: AppDrawerPage(userRepository: userRepository),
         appBar: AppBar(
-          title: Text(title),
+          title: Text(args.title),
         ),
         body: Container(
             margin: new EdgeInsets.all(5.0),
-            child: _GroupList()
+            child: _MessageList()
+        ),
+        resizeToAvoidBottomInset: true,
+        bottomNavigationBar: Transform.translate(
+          offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+          child: BottomAppBar(
+            child: Row(
+              children: <Widget>[
+                Material(
+                  child: new Container(
+                    margin: new EdgeInsets.symmetric(horizontal: 1.0),
+                    child: new IconButton(
+                      icon: new Icon(Icons.image),
+                      onPressed: getImage,
+                    ),
+                  ),
+                  color: Colors.white,
+                ),
+                Expanded(
+                    child: TextFormField(
+                      controller: _controller,
+                      decoration: new InputDecoration(
+                          contentPadding: const EdgeInsets.all(5)),
+                    )),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+                    print("send Message tapped");
+                    submitText(context);
+                  },
+                )
+              ],
+            ),
+          ),
         )
     );
   }
+
+  void submitText(context) async {
+    print("chat field submitted >> " + _controller.text);
+    if (_controller.text.length > 0) {
+      try {
+        _controller.clear();
+        FocusScope.of(context).unfocus();
+      } catch (e){
+
+      }
+    }
+  }
+
+  Future getImage() async {
+    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (imageFile != null) {
+      /*setState(() {
+        isLoading = true;
+      });
+      uploadFile();
+
+       */
+    }
+  }
 }
 
-class _GroupList extends StatelessWidget {
+class _MessageList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    return BlocBuilder<GroupBloc, GroupState>(
+    final GroupArguments args = ModalRoute.of(context).settings.arguments;
+    /*return BlocBuilder<GroupBloc, GroupState>(
         bloc: BlocProvider.of<GroupBloc>(context),
         builder: (context,state){
           print(state.toString());
@@ -51,6 +109,7 @@ class _GroupList extends StatelessWidget {
                     )));
           }
           return Text('Something Failed!!');
-        });
+        });*/
+    return Text('Group Page'+ args.id.toString());
   }
 }

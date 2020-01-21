@@ -5,6 +5,7 @@ class ApiInterceptor implements InterceptorContract {
   Future<RequestData> interceptRequest({RequestData data}) async {
     print('Request Intercept:');
     print(data.headers);
+    
     return data;
   }
 

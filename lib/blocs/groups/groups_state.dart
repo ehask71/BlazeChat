@@ -17,7 +17,7 @@ class GroupsLoaded extends GroupsState {
 
   @override
   String toString() =>
-      'GroupsLoaded { posts: ${groups.length} }';
+      'GroupsLoaded { groups: ${groups.length} }';
 }
 
 class NotLoaded extends GroupsState {}

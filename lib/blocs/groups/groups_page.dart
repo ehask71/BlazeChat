@@ -1,6 +1,7 @@
 import 'package:blaze_chat/blocs/groups/groups.dart';
 import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
 import 'package:blaze_chat/user_repository.dart';
+import 'package:blaze_chat/blocs/group/group.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +45,8 @@ class _GroupList extends StatelessWidget {
                   subtitle: Text('coming soon'),
                   onTap: (){
                     print("Clicked:"+ state.groups[index].id.toString());
-                    Navigator.pushReplacementNamed(context, '/group');
+                    Navigator.pushReplacementNamed(context, GroupPage.routeName,
+                    arguments: GroupArguments(state.groups[index].id,state.groups[index].title));
                     },
             )));
       }

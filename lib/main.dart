@@ -55,7 +55,7 @@ class App extends StatelessWidget {
       routes: {
         '/addchat': (context) => AddChatPage(),
         '/settings': (context) => SettingsPage(),
-        '/group': (context) => GroupPage()
+        GroupPage.routeName: (context) => GroupPage()
       },
       theme: new ThemeData(
           primarySwatch: primaryBlack,
