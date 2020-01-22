@@ -20,7 +20,10 @@ class GroupPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(args.title),
         ),
-        body: Container(margin: new EdgeInsets.all(5.0), child: _MessageList()),
+        body: Container(
+            margin: new EdgeInsets.all(5.0),
+            child: _MessageList()
+        ),
         resizeToAvoidBottomInset: true,
         bottomNavigationBar: Transform.translate(
           offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
