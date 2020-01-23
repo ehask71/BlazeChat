@@ -3,6 +3,9 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 class GroupBloc extends Bloc<GroupEvent, GroupState> {
+  final int id;
+
+  GroupBloc(this.id);
   @override
   // TODO: implement initialState
   GroupState get initialState => GroupLoading();

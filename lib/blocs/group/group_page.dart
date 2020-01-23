@@ -22,7 +22,7 @@ class GroupPage extends StatelessWidget {
         ),
         body: Container(
             margin: new EdgeInsets.all(5.0),
-            child: _MessageList()
+            child: buildBody(context, args.id)
         ),
         resizeToAvoidBottomInset: true,
         bottomNavigationBar: Transform.translate(
@@ -57,6 +57,26 @@ class GroupPage extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  BlocProvider<GroupBloc> buildBody(BuildContext context,int id){
+    return BlocProvider(
+      create: (_) => GroupBloc(id),
+      child: BlocBuilder<GroupBloc, GroupState>(
+        builder: (context, state){
+          if(state is GroupLoading){
+
+          }
+          if(state is GroupLoaded){
+            return ListView.builder(
+                itemBuilder: null);
+          }
+          if(state is GroupNotLoaded){
+
+          }
+        },
+      ),
+    );
   }
 
   void submitText(context) async {
