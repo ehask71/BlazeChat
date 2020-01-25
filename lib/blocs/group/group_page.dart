@@ -2,6 +2,7 @@ import 'package:blaze_chat/blocs/group/group.dart';
 import 'package:blaze_chat/blocs/appdrawer/appdrawer.dart';
 import 'package:blaze_chat/user_repository.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,11 +66,27 @@ class GroupPage extends StatelessWidget {
       child: BlocBuilder<GroupBloc, GroupState>(
         builder: (context, state){
           if(state is GroupLoading){
-
+            return Center(
+                child:SpinKitWanderingCubes(
+                  color: Colors.black,
+                  size: 50.0,
+                )
+            );
           }
           if(state is GroupLoaded){
             return ListView.builder(
-                itemBuilder: null);
+                itemCount: state.messages.length,
+                itemBuilder: (context,index) => Card(
+                    child:ListTile(
+                      leading: (state.messages[index].image == "")? CircleAvatar(backgroundImage: AssetImage('assets/images/Hellfire-Eight-4inch.png'),radius: 35):CircleAvatar(backgroundImage: NetworkImage(state.messages[index].image)),
+                      title: Text(state.messages[index].title,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      subtitle: Text('coming soon'),
+                      onTap: (){
+                        print("Clicked:"+ state.messages[index].id.toString());
+                        Navigator.pushReplacementNamed(context, GroupPage.routeName,
+                            arguments: GroupArguments(state.messages[index].id,state.messages[index].title));
+                      },
+                    )));
           }
           if(state is GroupNotLoaded){
 
