@@ -78,13 +78,13 @@ class GroupPage extends StatelessWidget {
                 itemCount: state.messages.length,
                 itemBuilder: (context,index) => Card(
                     child:ListTile(
-                      leading: (state.messages[index].image == "")? CircleAvatar(backgroundImage: AssetImage('assets/images/Hellfire-Eight-4inch.png'),radius: 35):CircleAvatar(backgroundImage: NetworkImage(state.messages[index].image)),
-                      title: Text(state.messages[index].title,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      leading: (state.messages[index].account.avatar == "")? CircleAvatar(backgroundImage: AssetImage('assets/images/Hellfire-Eight-4inch.png'),radius: 35):CircleAvatar(backgroundImage: NetworkImage(state.messages[index].account.avatar)),
+                      title: Text(state.messages[index].content,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       subtitle: Text('coming soon'),
                       onTap: (){
                         print("Clicked:"+ state.messages[index].id.toString());
                         Navigator.pushReplacementNamed(context, GroupPage.routeName,
-                            arguments: GroupArguments(state.messages[index].id,state.messages[index].title));
+                            arguments: GroupArguments(state.messages[index].id,state.messages[index].content));
                       },
                     )));
           }
