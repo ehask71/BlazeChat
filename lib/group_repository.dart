@@ -20,4 +20,12 @@ class GroupRepository {
         headers: {HttpHeaders.authorizationHeader: "Bearer "+token});
     return allGroupsFromJson(response.body);
   }
+
+  Future<List> fetchGroup(int id, int startIndex, int limit) async {
+    final token = await _userRepository.getToken();
+    final response = await client.get(
+        Constants().API + 'group/$id?_start=$startIndex&_limit=$limit',
+        headers: {HttpHeaders.authorizationHeader: "Bearer "+token});
+    return allGroupsFromJson(response.body);
+  }
 }

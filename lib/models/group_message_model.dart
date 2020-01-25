@@ -1,3 +1,4 @@
+import 'package:blaze_chat/models/account.dart';
 import 'package:equatable/equatable.dart';
 import 'dart:convert';
 
@@ -7,15 +8,16 @@ List<GroupMessage> allGroupMessagesFromJson(String str){
 }
 
 class GroupMessage extends Equatable {
-  final String id;
+  final int id;
   final String group_id;
   final String account_id;
   final String content;
   final String created;
   final String modified;
+  final Account account;
 
   GroupMessage(
-      {this.id, this.group_id, this.account_id, this.content, this.created, this.modified});
+      {this.id, this.group_id, this.account_id, this.content, this.created, this.modified,this.account});
 
   factory GroupMessage.fromJson(Map<String, dynamic> json) =>
       GroupMessage(
@@ -24,11 +26,14 @@ class GroupMessage extends Equatable {
           account_id: json['account_id'],
           content: json['content'],
           created: json['created'],
-          modified: json['modified']);
+          modified: json['modified'],
+          account: Account.fromJson(json["account"])
+      );
 
   @override
   List<Object> get props =>
       [id, group_id, account_id, content, created, modified];
 
-
 }
+
+
